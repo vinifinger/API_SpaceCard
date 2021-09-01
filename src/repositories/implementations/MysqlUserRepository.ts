@@ -212,7 +212,7 @@ export class MysqlUserRepository implements IUserRepository {
     };
 
     async createToken(user: User): Promise<Token> {
-        const result = { token: '' };
+        const result = { token: '', email: user.email, name: user.name };
         (user)
          result.token = jwt.sign({ user }, String(process.env.SECRET_STRING), {
             expiresIn: 28800

@@ -3,8 +3,8 @@ import { createUserController } from './useCases/User/CreateUser';
 import { readUserController } from './useCases/User/ReadUser';
 import { updateUserController } from './useCases/User/UpdateUser';
 import { readUserByHashController } from './useCases/User/ReadUserByHash';
-import { deleteUserController } from './useCases/User/DeleteUser';
 import { loginUserController } from './useCases/User/LoginUser';
+import { deleteUserController } from './useCases/User/DeleteUser';
 const routes = Router();
 
 // routes.post('/v1/car', (request, response) => {
@@ -33,7 +33,7 @@ routes.delete('/v1/user/:hash', (request, response) => {
     return deleteUserController.handle(request, response);
 });
 
-routes.post('/v1/user/login', (request, response) => {
+routes.post('/user/login', (request, response) => {
     return loginUserController.handle(request, response);
 });
 

@@ -14,6 +14,6 @@ export class LoginUserUseCase {
         
         const content = await this.userRepository.loginUser(user);
         const result = await this.userRepository.createToken(content);
-        return new Token(result);
+        return result;
     }
 }
