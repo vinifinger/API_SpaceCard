@@ -4,7 +4,10 @@
   "description": "Esse é um serviço para o Space Card",
   "main": "index.js",
   "scripts": {
-    "start": "tsnd --transpile-only --ignore-watch node_modules --respawn src/server.ts",
+    "dev:1": "tsnd --transpile-only --ignore-watch node_modules --respawn src/server.ts",
+    "prepare": "tsc",
+    "start": "node dist/src/server.js",
+    "dev": "",
     "test": "mocha -r ts-node/register tests/**/*.test.ts",
     "knex:migrate": "knex --knexfile knexfile.ts migrate:latest",
     "knex:migrate:rollback": "knex --knexfile knexfile.ts migrate:rollback"
