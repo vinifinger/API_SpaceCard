@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev:1": "tsnd --transpile-only --ignore-watch node_modules --respawn src/server.ts",
-    "prepare": "tsc",
+    "prepare": "npx tsc",
     "start": "node dist/src/server.js",
     "dev": "",
     "test": "mocha -r ts-node/register tests/**/*.test.ts",
@@ -24,8 +24,9 @@
     "@types/mysql": "^2.15.19",
     "@types/uuid": "^8.3.1",
     "mocha": "^8.2.1",
-    "ts-node-dev": "^1.0.0-pre.56",
-    "typescript": "^3.9.7"
+    "ts-node": "^10.2.1",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^3.9.10"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -33,6 +34,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "knex": "^0.21.12",
     "mysql": "^2.18.1",
     "uuid": "^8.3.2"
   }

@@ -39,7 +39,7 @@ export class JwtMiddlewareRepository implements IMiddlewareRepository {
                     }
 
                     return 3;
-                } catch (error: any) {
+                } catch (error) {
                     throw error;
                 }
             } else {

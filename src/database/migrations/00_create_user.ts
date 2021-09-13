@@ -1,5 +1,5 @@
 import { AES } from 'crypto-ts';
-import { Knex } from 'knex';
+import * as Knex from 'knex';
 import { v4 } from "uuid";
 
 export async function up(Knex: Knex) {
