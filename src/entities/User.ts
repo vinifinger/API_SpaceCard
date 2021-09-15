@@ -6,11 +6,13 @@ export class User {
     public name?: string;
     public surname?: string;
     public email?: string;
+    public bio?: string;
+    public username?: string;
+    public password?: string;
     public facebook?: string;
     public linkedin?: string;
     public status?: Number;
     public twitter?: string;
-    public password?: string;
     public telephone?: string;
     public instagram?: string;
     public whatsapp?: string;

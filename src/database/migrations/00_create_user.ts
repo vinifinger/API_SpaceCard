@@ -9,12 +9,14 @@ export async function up(Knex: Knex) {
         table.string('name');
         table.string('surname');
         table.string('email');
+        table.string('bio');
+        table.string('username');
+        table.string('password');
         table.string('facebook');
         table.string('linkedin');
         table.dateTime('date_insert').defaultTo(Knex.fn.now());
         table.integer('status');
         table.string('twitter');
-        table.string('password');
         table.string('telephone');
         table.string('instagram');
         table.string('whatsapp');
@@ -37,11 +39,13 @@ export async function up(Knex: Knex) {
         hash: v4(),
         surname: 'sobrenome',
         email: 'root@root.com',
+        bio: 'bio',
+        username: 'userroot',
+        password: AES.encrypt('Senha', String(process.env.SECRET_STRING)).toString(),
         facebook: 'facebook',
         linkedin: 'linkedin',
         status: 1,
         twitter: 'twitter',
-        password: AES.encrypt('Senha', String(process.env.SECRET_STRING)).toString(),
         telephone: '(51) 99999-9999',
         instagram: 'instagram',
         whatsapp: 'whatsapp',
