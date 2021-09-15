@@ -2,12 +2,14 @@ export interface IUpdateUserRequestDTO {
     hash: string
     name?: string;
     surname?: string;
+    bio?: string;
+    username?: string;
+    password?: string;
     email?: string;
     facebook?: string;
     linkedin?: string;
     status?: Number;
     twitter?: string;
-    password?: string;
     telephone?: string;
     instagram?: string;
     whatsapp?: string;

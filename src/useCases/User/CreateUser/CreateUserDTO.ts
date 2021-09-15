@@ -2,11 +2,13 @@ export interface ICreateUserRequestDTO {
     name?: string;
     surname?: string;
     email?: string;
+    bio?: string;
+    username?: string;
+    password?: string;
     facebook?: string;
     linkedin?: string;
     status?: Number;
     twitter?: string;
-    password?: string;
     telephone?: string;
     instagram?: string;
     whatsapp?: string;
