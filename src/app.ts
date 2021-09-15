@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { routes } from './routes';
 import { middlewareController } from './useCases/Middleware';
+import { authController } from './useCases/Auth';
 // import fs from 'fs';
 // import swaggerUi from 'swagger-ui-express';
 

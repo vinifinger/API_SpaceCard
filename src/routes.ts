@@ -5,6 +5,8 @@ import { updateUserController } from './useCases/User/UpdateUser';
 import { readUserByHashController } from './useCases/User/ReadUserByHash';
 import { loginUserController } from './useCases/User/LoginUser';
 import { deleteUserController } from './useCases/User/DeleteUser';
+import { forgotPasswordUserController } from './useCases/User/ForgotPasswordUser';
+import { resetPasswordUserController } from './useCases/User/ResetPasswordUser';
 const routes = Router();
 
 // routes.post('/v1/car', (request, response) => {
@@ -36,5 +38,14 @@ routes.delete('/v1/user/:hash', (request, response) => {
 routes.post('/user/login', (request, response) => {
     return loginUserController.handle(request, response);
 });
+
+routes.post('/user/forgot', (request, response) => {
+    return forgotPasswordUserController.handle(request, response);
+});
+
+routes.post('/auth/user/resetpassword/:token', (request, response) => {
+    return resetPasswordUserController.handle(request, response);
+});
+
 
 export { routes };

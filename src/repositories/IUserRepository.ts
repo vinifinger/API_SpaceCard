@@ -19,4 +19,8 @@ export interface IUserRepository {
     createToken(user: User): Promise<Token>;
 
     deleteToken(token: Token): Promise<void>;
+
+    forgotPassword(token: Token): Promise<void | Error>;
+
+    resetPasswordUser(token: Token): Promise<void | Error>;
 }

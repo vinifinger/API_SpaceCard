@@ -12,7 +12,7 @@ export class MysqlUserRepository implements IUserRepository {
         try {
             const result = await db('user').where('email', email);
 
-            return new User(result[0]);
+            return new User(result[0], result[0].hash);
         } catch (err) {
             throw err;
         }
@@ -271,4 +271,45 @@ export class MysqlUserRepository implements IUserRepository {
             throw err;
         }
     };
+
+    async forgotPassword(token: Token): Promise<void | Error> {
+        try {
+
+            const trx = await db.transaction();
+
+            await trx('user').update({
+                reset_password_token: token.token
+            }).where('email', token.email);
+
+            trx.commit();
+
+        return;
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    async resetPasswordUser(user: User): Promise<void | Error> {
+        try {
+            console.log(user);
+            const {
+                hash,
+                password,
+                reset_password_token
+            } = user;
+
+            const trx = await db.transaction();
+
+            await trx('user').update({
+                password,
+                reset_password_token
+            }).where('hash', hash);
+
+            trx.commit();
+
+        return;
+        } catch (err) {
+            throw err;
+        }
+    }
 }

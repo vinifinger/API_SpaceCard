@@ -32,6 +32,7 @@ export async function up(Knex: Knex) {
         table.string('end_number');
         table.string('end_district');
         table.string('end_cep');
+        table.string('reset_password_token');
     });
 
     await Knex('user').insert({
