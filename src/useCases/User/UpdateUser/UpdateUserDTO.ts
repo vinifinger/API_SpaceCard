@@ -3,12 +3,8 @@ export interface IUpdateUserRequestDTO {
     name?: string;
     surname?: string;
     bio?: string;
-    username?: string;
-    password?: string;
-    email?: string;
     facebook?: string;
     linkedin?: string;
-    status?: Number;
     twitter?: string;
     telephone?: string;
     instagram?: string;

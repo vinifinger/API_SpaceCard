@@ -1,3 +1,4 @@
+import { Paginate } from "../../../entities/Paginate";
 import { Token } from "../../../entities/Token";
 import { User } from "../../../entities/User";
 import { IUserRepository } from "../../../repositories/IUserRepository";
@@ -8,9 +9,9 @@ export class ReadUserUseCase {
         private userRepository: IUserRepository 
     ){}
     
-    async execute() {
-
-        const data = await this.userRepository.readUser();
-        return data; 
+    async execute(data: IReadUserRequestDTO) {
+        const paginate = new Paginate(data);
+        const response = await this.userRepository.readUser(paginate);
+        return response; 
     }
 }

@@ -75,23 +75,80 @@ routes.get('/v1/user/:hash', (request: Request, response: Response) => {
     return readUserByHashController.handle(request, response);
 });
 
-routes.patch('/v1/user/:hash', (request: Request, response: Response) => {
-    return updateUserController.handle(request, response);
+routes.patch('/v1/user/:hash', 
+    validate([
+        body('name').optional().isString(),
+        body('surname').optional().isString(),
+        body('bio').optional().isString(),
+        body('facebook').optional().isURL(),
+        body('linkedin').optional().isURL(),
+        body('twitter').optional().isURL(),
+        body('telephone').optional().isMobilePhone(['pt-BR']),
+        body('instagram').optional().isURL(),
+        body('whatsapp').optional().isURL(),
+        body('telegram').optional().isURL(),
+        body('tiktok').optional().isURL(),
+        body('spotify').optional().isURL(),
+        body('youtube').optional().isURL(),
+        body('wildcard_1').optional().isURL(),
+        body('wildcard_2').optional().isURL(),
+        body('wildcard_3').optional().isURL(),
+        body('end_state').optional(),
+        body('end_city').optional(),
+        body('end_number').optional(),
+        body('end_district').optional(),
+        body('end_cep').optional().isPostalCode('BR')
+    ]),
+    (request: Request, response: Response) => {
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            return response.status(400).json({ errors: errors.array() });
+        }
+
+        return updateUserController.handle(request, response);
 });
 
 routes.delete('/v1/user/:hash', (request: Request, response: Response) => {
     return deleteUserController.handle(request, response);
 });
 
-routes.post('/user/login', (request: Request, response: Response) => {
-    return loginUserController.handle(request, response);
+routes.post('/user/login', 
+    validate([
+        body('email').normalizeEmail().isEmail(),
+        body('password').isString()
+    ]),
+    (request: Request, response: Response) => {
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            return response.status(400).json({ errors: errors.array() });
+        }
+    
+        return loginUserController.handle(request, response);
 });
 
-routes.post('/user/forgot', (request: Request, response: Response) => {
-    return forgotPasswordUserController.handle(request, response);
+routes.post('/user/forgot', 
+    validate([
+        body('email').normalizeEmail().isEmail()
+    ]),
+    (request: Request, response: Response) => {
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            return response.status(400).json({ errors: errors.array() });
+        }
+        
+        return forgotPasswordUserController.handle(request, response);
 });
 
-routes.post('/auth/user/resetpassword/:token', (request: Request, response: Response) => {
-    return resetPasswordUserController.handle(request, response);
+routes.post('/auth/user/resetpassword/:token', 
+    validate([
+        body('password').isStrongPassword()
+    ]),
+    (request: Request, response: Response) => {
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            return response.status(400).json({ errors: errors.array() });
+        }
+
+        return resetPasswordUserController.handle(request, response);
 });
 export { routes };

@@ -5,14 +5,16 @@ import { IUserRepository } from "../IUserRepository";
 import jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
 import { AES, enc } from "crypto-ts";
+import { Paginate } from "../../entities/Paginate";
+import { DataPaginate } from "../../entities/DataPaginate";
 dotenv.config();
 
 export class MysqlUserRepository implements IUserRepository {
     async findUserbyemail(email: string): Promise<User> {
         try {
-            const result = await db('user').where('email', email);
+            const result = await db('user').where('email', email).andWhere('status', 1);
 
-            return new User(result[0], result[0].hash);
+            return (result[0] ? new User(result[0], result[0].hash) : new User(result[0]));
         } catch (err) {
             throw err;
         }
@@ -89,15 +91,14 @@ export class MysqlUserRepository implements IUserRepository {
         }
     };
 
-    async readUser(): Promise<User[]> {
+    async readUser(paginate: Paginate): Promise<DataPaginate> {
+
+        const { page, limit } = paginate;
 
         try {
             
-            const data = await db('user').where('status', 1);
-            const users:User[] = [];
-            data.forEach((i) => {
-                users.push(new User(i, i.hash));
-            });
+            const data = await db('user').where('status', 1).paginate({ perPage: limit, currentPage: page });
+            const users = new DataPaginate(data);
 
             return users;
 
@@ -134,13 +135,9 @@ export class MysqlUserRepository implements IUserRepository {
             hash,
             name,
             surname,
-            email,
             bio,
-            username,
-            password,
             facebook,
             linkedin,
-            status,
             twitter,
             telephone,
             instagram,
@@ -166,13 +163,9 @@ export class MysqlUserRepository implements IUserRepository {
             await trx('user').update({
                 name,
                 surname,
-                email,
                 bio,
-                username,
-                password,
                 facebook,
                 linkedin,
-                status,
                 twitter,
                 telephone,
                 instagram,
