@@ -11,6 +11,8 @@ export interface IUserRepository {
     readUser(paginate: Paginate): Promise<DataPaginate>;
 
     readUserByHash(User: User): Promise<User>;
+    
+    readUserByUsername(User: User): Promise<User>;
 
     updateUser(user: User): Promise<number | Error>;
 

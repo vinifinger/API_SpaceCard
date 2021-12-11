@@ -97,7 +97,27 @@ export class MysqlUserRepository implements IUserRepository {
 
         try {
             
-            const data = await db('user').where('status', 1).paginate({ perPage: limit, currentPage: page });
+            const data = await db.select(
+                'hash', 
+                'name', 
+                'surname', 
+                'email', 
+                'bio', 
+                'username', 
+                'facebook', 
+                'linkedin', 
+                'twitter', 
+                'telephone', 
+                'instagram',
+                'whatsapp',
+                'telegram',
+                'tiktok',
+                'spotify',
+                'youtube',
+                'wildcard_1',
+                'wildcard_2',
+                'wildcard_3'
+            ).from('user').where('status', 1).paginate({ perPage: limit, currentPage: page });
             const users = new DataPaginate(data);
 
             return users;
@@ -121,6 +141,51 @@ export class MysqlUserRepository implements IUserRepository {
 
             if (!data[0])
                 throw 'Hash invalid.';
+
+            return new User(data[0], data[0].hash);
+
+        } catch (err) {
+            throw err;
+        }
+    };
+
+    async readUserByUsername(user: User): Promise<User> {
+
+        const { username } = user;
+
+        if (!username) {
+            throw 'No username provided.';
+        }
+
+        try {
+            
+            const data = await db.select(
+                'hash', 
+                'name', 
+                'surname', 
+                'email', 
+                'bio', 
+                'username', 
+                'facebook', 
+                'linkedin', 
+                'twitter', 
+                'telephone', 
+                'instagram',
+                'whatsapp',
+                'telegram',
+                'tiktok',
+                'spotify',
+                'youtube',
+                'wildcard_1',
+                'wildcard_2',
+                'wildcard_3'
+                )
+            .from('user')
+            .where('status', 1)
+            .andWhere('username', username);
+
+            if (!data[0])
+                throw 'Username invalid.';
 
             return new User(data[0], data[0].hash);
 

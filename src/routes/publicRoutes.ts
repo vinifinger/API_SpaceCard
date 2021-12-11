@@ -1,16 +1,14 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { createUserController } from './useCases/User/CreateUser';
-import { readUserController } from './useCases/User/ReadUser';
-import { updateUserController } from './useCases/User/UpdateUser';
-import { readUserByHashController } from './useCases/User/ReadUserByHash';
-import { loginUserController } from './useCases/User/LoginUser';
-import { deleteUserController } from './useCases/User/DeleteUser';
-import { forgotPasswordUserController } from './useCases/User/ForgotPasswordUser';
-import { resetPasswordUserController } from './useCases/User/ResetPasswordUser';
+import { createUserController } from '../useCases/User/CreateUser';
+import { readUserController } from '../useCases/User/ReadUser';
+import { readUserByUsernameController } from '../useCases/User/ReadUserByUsername';
+import { loginUserController } from '../useCases/User/LoginUser';
+import { forgotPasswordUserController } from '../useCases/User/ForgotPasswordUser';
+import { resetPasswordUserController } from '../useCases/User/ResetPasswordUser';
 import { body, ValidationChain, validationResult } from 'express-validator';
-const routes = Router();
+const publicRoutes = Router();
 
-// routes.post('/v1/car', (request: Request, response: Response) => {
+// publicRoutes.post('/v1/car', (request: Request, response: Response) => {
 //     return createMovieController.handle(request, response);
 // });
 
@@ -31,7 +29,7 @@ const validate = (validations: ValidationChain[]) => {
     };
 };
 
-routes.post('/user',
+publicRoutes.post('/user',
     validate([
         body('name').isString(),
         body('surname').isString(),
@@ -67,52 +65,15 @@ routes.post('/user',
         return createUserController.handle(request, response);
 });
 
-routes.get('/v1/user', (request: Request, response: Response) => {
+publicRoutes.get('/user', (request: Request, response: Response) => {
     return readUserController.handle(request, response);
 });
 
-routes.get('/v1/user/:hash', (request: Request, response: Response) => {
-    return readUserByHashController.handle(request, response);
+publicRoutes.get('/user/:username', (request: Request, response: Response) => {
+    return readUserByUsernameController.handle(request, response);
 });
 
-routes.patch('/v1/user/:hash', 
-    validate([
-        body('name').optional().isString(),
-        body('surname').optional().isString(),
-        body('bio').optional().isString(),
-        body('facebook').optional().isURL(),
-        body('linkedin').optional().isURL(),
-        body('twitter').optional().isURL(),
-        body('telephone').optional().isMobilePhone(['pt-BR']),
-        body('instagram').optional().isURL(),
-        body('whatsapp').optional().isURL(),
-        body('telegram').optional().isURL(),
-        body('tiktok').optional().isURL(),
-        body('spotify').optional().isURL(),
-        body('youtube').optional().isURL(),
-        body('wildcard_1').optional().isURL(),
-        body('wildcard_2').optional().isURL(),
-        body('wildcard_3').optional().isURL(),
-        body('end_state').optional(),
-        body('end_city').optional(),
-        body('end_number').optional(),
-        body('end_district').optional(),
-        body('end_cep').optional().isPostalCode('BR')
-    ]),
-    (request: Request, response: Response) => {
-        const errors = validationResult(request);
-        if (!errors.isEmpty()) {
-            return response.status(400).json({ errors: errors.array() });
-        }
-
-        return updateUserController.handle(request, response);
-});
-
-routes.delete('/v1/user/:hash', (request: Request, response: Response) => {
-    return deleteUserController.handle(request, response);
-});
-
-routes.post('/user/login', 
+publicRoutes.post('/user/login', 
     validate([
         body('email').normalizeEmail().isEmail(),
         body('password').isString()
@@ -126,7 +87,7 @@ routes.post('/user/login',
         return loginUserController.handle(request, response);
 });
 
-routes.post('/user/forgot', 
+publicRoutes.post('/user/forgot', 
     validate([
         body('email').normalizeEmail().isEmail()
     ]),
@@ -139,7 +100,7 @@ routes.post('/user/forgot',
         return forgotPasswordUserController.handle(request, response);
 });
 
-routes.post('/auth/user/resetpassword/:token', 
+publicRoutes.post('/user/resetpassword/:token', 
     validate([
         body('password').isStrongPassword()
     ]),
@@ -151,4 +112,4 @@ routes.post('/auth/user/resetpassword/:token',
 
         return resetPasswordUserController.handle(request, response);
 });
-export { routes };
+export { publicRoutes };

@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-import { routes } from './routes';
 import { middlewareController } from './useCases/Middleware';
-import { authController } from './useCases/Auth';
+import { userRoutes } from './routes/userRoutes';
+import { publicRoutes } from './routes/publicRoutes';
 // import fs from 'fs';
 // import swaggerUi from 'swagger-ui-express';
 
@@ -22,6 +22,7 @@ app.use('/v1', (request, response, next) => {
     return middlewareController.handle(request, response, next);
 });
 
-app.use(routes);
+app.use(publicRoutes);
+app.use(userRoutes);
 
 export { app }
