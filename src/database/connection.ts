@@ -1,8 +1,9 @@
 import * as config from '../utils/knexfile';
-import Knex from 'knex';
+import { knex } from 'knex'
 import { attachPaginate } from 'knex-paginate';
 
-const db = Knex(config);
+const db = knex(config)
+
 attachPaginate();
 
 export { db } 
