@@ -47,7 +47,8 @@ export class MysqlUserRepository implements IUserRepository {
             end_city,
             end_number,
             end_district,
-            end_cep
+            end_cep,
+            imageUrl
         } = user;
 
         const trx = await db.transaction();
@@ -80,7 +81,8 @@ export class MysqlUserRepository implements IUserRepository {
                 end_city,
                 end_number,
                 end_district,
-                end_cep
+                end_cep,
+                imageUrl
             });
 
             trx.commit();
@@ -116,7 +118,8 @@ export class MysqlUserRepository implements IUserRepository {
                 'youtube',
                 'wildcard_1',
                 'wildcard_2',
-                'wildcard_3'
+                'wildcard_3',
+                'imageUrl'
             ).from('user').where('status', 1).paginate({ perPage: limit, currentPage: page });
             const users = new DataPaginate(data);
 
@@ -178,7 +181,8 @@ export class MysqlUserRepository implements IUserRepository {
                 'youtube',
                 'wildcard_1',
                 'wildcard_2',
-                'wildcard_3'
+                'wildcard_3',
+                'imageUrl'
                 )
             .from('user')
             .where('status', 1)
@@ -218,7 +222,8 @@ export class MysqlUserRepository implements IUserRepository {
             end_city,
             end_number,
             end_district,
-            end_cep
+            end_cep,
+            imageUrl
         } = user;
 
         try {
@@ -246,7 +251,8 @@ export class MysqlUserRepository implements IUserRepository {
                 end_city,
                 end_number,
                 end_district,
-                end_cep
+                end_cep,
+                imageUrl
             }).where('hash', hash);
 
             trx.commit();

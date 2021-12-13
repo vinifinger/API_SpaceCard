@@ -4,6 +4,7 @@ import { updateUserController } from '../useCases/User/UpdateUser';
 import { readUserByHashController } from '../useCases/User/ReadUserByHash';
 import { deleteUserController } from '../useCases/User/DeleteUser';
 import { body, ValidationChain, validationResult } from 'express-validator';
+import uploads from '../utils/upload';
 const userRoutes = Router();
 
 // userRoutes.post('/v1/car', (request: Request, response: Response) => {
@@ -36,6 +37,7 @@ userRoutes.get('/v1/user/:hash', (request: Request, response: Response) => {
 });
 
 userRoutes.patch('/v1/user/:hash', 
+    uploads.single('image'),
     validate([
         body('name').optional().isString(),
         body('surname').optional().isString(),

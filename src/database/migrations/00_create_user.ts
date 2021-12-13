@@ -33,6 +33,7 @@ export async function up(Knex: Knex) {
         table.string('end_district');
         table.string('end_cep');
         table.string('reset_password_token');
+        table.string('imageUrl');
     });
 
     await Knex('user').insert({
@@ -61,7 +62,8 @@ export async function up(Knex: Knex) {
         end_city: 'Endereço Cidade',
         end_number: 'Endereço Número',
         end_district: 'Endereço Bairro',
-        end_cep: 'Endereço CEP'
+        end_cep: 'Endereço CEP',
+        imageUrl: 'URL da Imagem'
     });
 
     return;

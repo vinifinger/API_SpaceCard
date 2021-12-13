@@ -35,6 +35,8 @@ export class UpdateUserController {
             end_cep
         } = req.body;
 
+        const image = req.file;
+
        try {
             const result = await this.updateUserUseCase.execute({
                 hash,
@@ -58,7 +60,8 @@ export class UpdateUserController {
                 end_city,
                 end_number,
                 end_district,
-                end_cep
+                end_cep,
+                image
            });
 
            return res.status(200).json({ result });

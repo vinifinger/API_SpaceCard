@@ -28,7 +28,9 @@ export class User {
     public end_number?: string;
     public end_district?: string;
     public end_cep?: string;
+    public image?: Express.Multer.File;
     public reset_password_token?: string | null;
+    public imageUrl?: string;
 
     constructor(props: User | User[], hash?: string | string[]) {
         Object.assign(this, props);

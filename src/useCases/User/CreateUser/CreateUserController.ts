@@ -36,6 +36,7 @@ export class CreateUserController {
         end_cep
         } = req.body;
 
+        const image = req.file;
        try {
             const result = await this.createUserUseCase.execute({
                 name,
@@ -61,7 +62,8 @@ export class CreateUserController {
                 end_city,
                 end_number,
                 end_district,
-                end_cep
+                end_cep,
+                image
            });
            console.log(`${header} | Resultado: ${result}`);
            return res.status(201).json({ result });

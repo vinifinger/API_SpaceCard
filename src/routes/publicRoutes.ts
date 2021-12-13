@@ -1,4 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
+import uploads from '../utils/upload';
 import { createUserController } from '../useCases/User/CreateUser';
 import { readUserController } from '../useCases/User/ReadUser';
 import { readUserByUsernameController } from '../useCases/User/ReadUserByUsername';
@@ -30,6 +31,7 @@ const validate = (validations: ValidationChain[]) => {
 };
 
 publicRoutes.post('/user',
+    uploads.single('image'),
     validate([
         body('name').isString(),
         body('surname').isString(),
