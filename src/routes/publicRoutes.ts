@@ -68,6 +68,9 @@ publicRoutes.post('/user',
 });
 
 publicRoutes.get('/user', (request: Request, response: Response) => {
+    request.query.limit = (request.query.limit ? request.query.limit : '10');
+    request.query.page = (request.query.page ? request.query.page : '1');
+
     return readUserController.handle(request, response);
 });
 
