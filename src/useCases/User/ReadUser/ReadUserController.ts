@@ -9,8 +9,8 @@ export class ReadUserController {
     async handle(req: Request, res: Response): Promise<Response> {
         const header = 'READ USER';
         console.log(`${header} | Inicio`);
-        const limit = Number(req.query.limit);
-        const page = Number(req.query.page);
+        const limit = req.query.limit ? Number(req.query.limit) : 10;
+        const page = req.query.page ? Number(req.query.page) : 1;
 
        try {
             const result = await this.readUserUseCase.execute({page, limit});
