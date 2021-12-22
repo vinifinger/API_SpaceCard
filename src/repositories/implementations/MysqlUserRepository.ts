@@ -211,30 +211,7 @@ export class MysqlUserRepository implements IUserRepository {
                 
             if (!user[0])
                 throw 'Username invalid.';
-            
-                // const data = await db('user').join('social_media', 'user.id', '=', 'social_media.id_user')
-            // .select(
-            //     'hash', 
-            //     'name', 
-            //     'surname', 
-            //     'email', 
-            //     'bio', 
-            //     'username', 
-            //     'telephone', 
-            //     'imageUrl',
-            //     'facebook',
-            //     'linkedin',
-            //     'twitter',
-            //     'instagram',
-            //     'whatsapp',
-            //     'telegram',
-            //     'tiktok',
-            //     'spotify',
-            //     'youtube',
-            //     'wildcard_1',
-            //     'wildcard_2',
-            //     'wildcard_3'
-            // ).where('user.username', username);
+
 
             const social_media = await db('social_media').leftJoin('user', 'social_media.id_user', '=', 'user.id')
             .select(

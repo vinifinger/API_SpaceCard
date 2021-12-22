@@ -4,49 +4,25 @@ import { IMiddlewareRepository } from '../IMiddlewareRepository';
 import { db } from '../../database/connection';
 import * as dotenv from 'dotenv';
 import { User } from '../../entities/User';
+import admin from '../../utils/firebaseAdmin';
 dotenv.config();
 export class JwtMiddlewareRepository implements IMiddlewareRepository {
     async verifyToken(token: Token): Promise<Number | void> {
         
         const data = token.token;
 
-        if (data === 'undefined')
+        if (!data)
             return 0; // No token provided
 
-            
-        return jwt.verify(String(data), String(process.env.SECRET_STRING), async (err, decoded) => {
-            if (err) 
-                return 1; // Token invalid
-            
-            if (decoded) {    
-                decoded.user.token = data;
-                const token = new Token(decoded.user);
-
-                try {    
-                    
-                    const content = await db('user')
-                    .where('email', token.email)
-                    .andWhere('password', token.password)
-                    .limit(1);
-
-                    if (content.length) {
-                        const response = await db('black_list')
-                        .where('hash', token.token);
-
-                        if (response.length)
-                            return 4;
-                        
-                        return 2;
-                    }
-
-                    return 3;
-                } catch (error) {
-                    throw error;
-                }
-            } else {
-                return 1;
+        try {
+            const decodeValue = await admin.auth().verifyIdToken(data);
+            if (decodeValue) {
+                return 2;
             }
-        });
+            return 1
+        } catch (e) {
+            throw e;
+        }
     }
 
     async generatePasswordResetToken(user: User): Promise<Token | Error> {

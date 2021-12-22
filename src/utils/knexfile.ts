@@ -5,17 +5,17 @@ dotenv.config();
 const config: Knex.Config = {
     client: 'mysql2',
     connection: {
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_BASE,
+        host: '185.201.11.65',
+        user: 'u945237655_user',
+        password: 'L@sanha123',
+        database: 'u945237655_spacecard'
     },
     pool: {
         min: 1,
         max: 20,
-    },
+      },
     migrations: {
-        directory: path.resolve(__dirname, 'src', 'database', 'migrations')
+        directory: '../database/migrations'
     },
     useNullAsDefault: true
 }
