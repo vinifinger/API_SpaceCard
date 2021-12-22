@@ -7,6 +7,8 @@ import * as dotenv from 'dotenv';
 import { AES, enc } from "crypto-ts";
 import { Paginate } from "../../entities/Paginate";
 import { DataPaginate } from "../../entities/DataPaginate";
+import { SocialMedia } from "../../entities/SocialMedia";
+import { DataUserSocialMedia } from "../../entities/DataUserSocialMedia";
 dotenv.config();
 
 export class MysqlUserRepository implements IUserRepository {
@@ -30,19 +32,7 @@ export class MysqlUserRepository implements IUserRepository {
             bio,
             username,
             password,
-            facebook,
-            linkedin,
-            twitter,
             telephone,
-            instagram,
-            whatsapp,
-            telegram,
-            tiktok,
-            spotify,
-            youtube,
-            wildcard_1,
-            wildcard_2,
-            wildcard_3,
             end_state,
             end_city,
             end_number,
@@ -63,20 +53,7 @@ export class MysqlUserRepository implements IUserRepository {
                 bio,
                 username,
                 password,
-                facebook,
-                linkedin,
-                status: 1,
-                twitter,
                 telephone,
-                instagram,
-                whatsapp,
-                telegram,
-                tiktok,
-                spotify,
-                youtube,
-                wildcard_1,
-                wildcard_2,
-                wildcard_3,
                 end_state,
                 end_city,
                 end_number,
@@ -93,6 +70,77 @@ export class MysqlUserRepository implements IUserRepository {
         }
     };
 
+    async createUserSocialMedia(user: User, socialMedia: SocialMedia) {
+        const {
+            facebook,
+            linkedin,
+            twitter,
+            instagram,
+            whatsapp,
+            telegram,
+            tiktok,
+            spotify,
+            youtube,
+            wildcard_1,
+            wildcard_2,
+            wildcard_3,
+        } = socialMedia;
+
+        const items = new Array;
+
+        (facebook ? items.push('facebook') : null);
+        (linkedin ? items.push('linkedin') : null);
+        (twitter ? items.push('twitter') : null);
+        (instagram ? items.push('instagram') : null);
+        (whatsapp ? items.push('whatsapp') : null);
+        (telegram ? items.push('telegram') : null);
+        (tiktok ? items.push('tiktok') : null);
+        (spotify ? items.push('spotify') : null);
+        (youtube ? items.push('youtube') : null);
+        (wildcard_1 ? items.push('wildcard_1') : null);
+        (wildcard_2 ? items.push('wildcard_2') : null);
+        (wildcard_3 ? items.push('wildcard_3') : null);
+
+        const id_user = user.id;
+
+        const trx = await db.transaction();
+
+        try {
+            await trx('social_media')
+            .insert({
+                id_user,
+                facebook,
+                linkedin,
+                twitter,
+                instagram,
+                whatsapp,
+                telegram,
+                tiktok,
+                spotify,
+                youtube,
+                wildcard_1,
+                wildcard_2,
+                wildcard_3
+            })
+            .onConflict('id_user')
+            .merge(items);
+
+            trx.commit();
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async readSocialMedia(): Promise<SocialMedia> {
+        try {
+            const data = await db('social_media');
+
+            return new SocialMedia(data[0]);
+        } catch (err) {
+            throw err;
+        }
+    }
+
     async readUser(paginate: Paginate): Promise<DataPaginate> {
 
         const { page, limit } = paginate;
@@ -106,19 +154,7 @@ export class MysqlUserRepository implements IUserRepository {
                 'email', 
                 'bio', 
                 'username', 
-                'facebook', 
-                'linkedin', 
-                'twitter', 
                 'telephone', 
-                'instagram',
-                'whatsapp',
-                'telegram',
-                'tiktok',
-                'spotify',
-                'youtube',
-                'wildcard_1',
-                'wildcard_2',
-                'wildcard_3',
                 'imageUrl'
             ).from('user').where('status', 1).paginate({ perPage: limit, currentPage: page });
             const users = new DataPaginate(data);
@@ -139,7 +175,7 @@ export class MysqlUserRepository implements IUserRepository {
         }
 
         try {
-            
+
             const data = await db('user').where('status', 1).andWhere('hash', hash);
 
             if (!data[0])
@@ -152,7 +188,7 @@ export class MysqlUserRepository implements IUserRepository {
         }
     };
 
-    async readUserByUsername(user: User): Promise<User> {
+    async readUserByUsername(user: User): Promise<DataUserSocialMedia> {
 
         const { username } = user;
 
@@ -162,17 +198,49 @@ export class MysqlUserRepository implements IUserRepository {
 
         try {
             
-            const data = await db.select(
+            const user = await db.select(
                 'hash', 
                 'name', 
                 'surname', 
                 'email', 
                 'bio', 
                 'username', 
-                'facebook', 
-                'linkedin', 
-                'twitter', 
                 'telephone', 
+                'imageUrl'
+                ).from('user').where('username', username);
+                
+            if (!user[0])
+                throw 'Username invalid.';
+            
+                // const data = await db('user').join('social_media', 'user.id', '=', 'social_media.id_user')
+            // .select(
+            //     'hash', 
+            //     'name', 
+            //     'surname', 
+            //     'email', 
+            //     'bio', 
+            //     'username', 
+            //     'telephone', 
+            //     'imageUrl',
+            //     'facebook',
+            //     'linkedin',
+            //     'twitter',
+            //     'instagram',
+            //     'whatsapp',
+            //     'telegram',
+            //     'tiktok',
+            //     'spotify',
+            //     'youtube',
+            //     'wildcard_1',
+            //     'wildcard_2',
+            //     'wildcard_3'
+            // ).where('user.username', username);
+
+            const social_media = await db('social_media').leftJoin('user', 'social_media.id_user', '=', 'user.id')
+            .select(
+                'facebook',
+                'linkedin',
+                'twitter',
                 'instagram',
                 'whatsapp',
                 'telegram',
@@ -182,16 +250,17 @@ export class MysqlUserRepository implements IUserRepository {
                 'wildcard_1',
                 'wildcard_2',
                 'wildcard_3',
-                'imageUrl'
-                )
-            .from('user')
-            .where('status', 1)
-            .andWhere('username', username);
+            ).where('user.username', username);
 
-            if (!data[0])
-                throw 'Username invalid.';
+            if (!social_media[0])
+                throw `Need to register user's social media links.`;
+            
+            const data = {
+                user: user[0],
+                social_media: social_media[0]
+            }
 
-            return new User(data[0], data[0].hash);
+            return data;
 
         } catch (err) {
             throw err;
@@ -205,19 +274,7 @@ export class MysqlUserRepository implements IUserRepository {
             name,
             surname,
             bio,
-            facebook,
-            linkedin,
-            twitter,
             telephone,
-            instagram,
-            whatsapp,
-            telegram,
-            tiktok,
-            spotify,
-            youtube,
-            wildcard_1,
-            wildcard_2,
-            wildcard_3,
             end_state,
             end_city,
             end_number,
@@ -234,19 +291,7 @@ export class MysqlUserRepository implements IUserRepository {
                 name,
                 surname,
                 bio,
-                facebook,
-                linkedin,
-                twitter,
                 telephone,
-                instagram,
-                whatsapp,
-                telegram,
-                tiktok,
-                spotify,
-                youtube,
-                wildcard_1,
-                wildcard_2,
-                wildcard_3,
                 end_state,
                 end_city,
                 end_number,
@@ -326,7 +371,7 @@ export class MysqlUserRepository implements IUserRepository {
     async deleteToken(token: Token): Promise<void> {
         try {
 
-            await db('blackList').insert({
+            await db('black_list').insert({
                 token: token.token
             });
 

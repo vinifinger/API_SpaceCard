@@ -30,7 +30,7 @@ export class JwtMiddlewareRepository implements IMiddlewareRepository {
                     .limit(1);
 
                     if (content.length) {
-                        const response = await db('blackList')
+                        const response = await db('black_list')
                         .where('hash', token.token);
 
                         if (response.length)

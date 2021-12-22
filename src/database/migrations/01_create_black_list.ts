@@ -1,7 +1,7 @@
 import { Knex } from 'knex';
 
 export async function up(knex: Knex) {
-    await knex.schema.createTable('blackList', table => {
+    await knex.schema.createTable('black_list', table => {
         table.increments('id').primary();
         table.string('hash');
         table.dateTime('date_insert').defaultTo(knex.fn.now());
@@ -11,5 +11,5 @@ export async function up(knex: Knex) {
 }
 
 export async function down(knex: Knex) {
-    return knex.schema.dropTable('blackList');
+    return knex.schema.dropTable('black_list');
 }
