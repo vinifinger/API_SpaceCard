@@ -49,8 +49,8 @@ export class JwtMiddlewareRepository implements IMiddlewareRepository {
                 return 1; // Token invalid
             
             if (decoded) {    
-                decoded.user.token = data;
-                const token = new Token(decoded.user);
+                const user = {token: data};
+                const token = new Token(user);
 
                 try {    
                     
