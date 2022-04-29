@@ -156,7 +156,7 @@ export class MysqlUserRepository implements IUserRepository {
                 'username', 
                 'telephone', 
                 'imageUrl'
-            ).from('user').where('status', 1).paginate({ perPage: limit, currentPage: page });
+            ).from('user').where('status', 1).paginate({ perPage: limit, currentPage: page, isLengthAware: true });
             const users = new DataPaginate(data);
 
             return users;
