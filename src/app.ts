@@ -3,7 +3,7 @@ import cors from 'cors';
 import { middlewareController } from './useCases/Middleware';
 import { userRoutes } from './routes/userRoutes';
 import { publicRoutes } from './routes/publicRoutes';
-// import fs from 'fs';
+// import fs from 'fs'; 
 // import swaggerUi from 'swagger-ui-express';
 
 const app = express();
